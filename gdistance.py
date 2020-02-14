@@ -30,7 +30,7 @@ class GDistance:
 
     def repeat_list(self, a, nr):
         """
-        Repeats a initial array/list nr times.
+        Repeats a initial array/list a number of times.
         :param a: Initial array/list to be repeated
         :param nr: number of times it should be repeated
         :return: A repetition of the initial array/list
@@ -42,8 +42,9 @@ class GDistance:
 
     def combine_lists(self, lists):
         """
+        Append an array of lists into one list
         :param lists:
-        :return:
+        :return: Return a list obtained from appending the array of lists
         """
         result = []
         for row in lists:
@@ -51,17 +52,15 @@ class GDistance:
             result.extend(a.tolist())
         return np.array(result)
 
-    def adjacency(self, matrix, Cells, directions, include=False):
+    def adjacency(self, transitionLayer, directions, include=False):
         """
-
-        :param matrix:
-        :param Cells:
-        :param directions:
-        :param include:
-        :return:
+        :param transitionLayer: Transition Layer
+        :param directions: Number of directions for determining adjacent cells; 4, 8 or 16
+        :param include: Boolean value
+        :return: Returns a matrix of adjacent cells in a given direction
         """
         r = self._raster.get_resolution()
-        xys = self._raster.xyFromCell(Cells)
+        xys = self._raster.xyFromCell(transitionLayer.transitionCells)
         xpoints = xys[:,0]
         ypoints = xys[:,1]
         if directions == 4:
@@ -119,7 +118,7 @@ class GDistance:
 
         d = d.reshape((2, int(len(d) / 2)))
         d = np.transpose(d)
-        cell = self.repeat_list(Cells, directions)
+        cell = self.repeat_list(transitionLayer.transitionCells, directions)
         pixCells = []
         cellfromxy = self._raster.cellFromXY(d)
         for index in range(len(cellfromxy)):
@@ -131,11 +130,11 @@ class GDistance:
     def transition(self, Raster, function, directions, symm=False, include = False):
         """
         :param Raster: Raster Class
-        :param function:
-        :param directions:
-        :param symm:
-        :param include:
-        :return:
+        :param function: transition function
+        :param directions: Number of directions for determining adjacent cells; 4, 8 or 16
+        :param symm: Boolean value
+        :param include: Boolean value
+        :return: Returns a transition matrix from a raster
         """
         self._raster = Raster
         array = self._raster.get_pixel_values()
@@ -151,8 +150,7 @@ class GDistance:
             transitionMatrix = sparse.csr_matrix((array)),
             transitionCells = Cells)
 
-        transitionMatr = self.tr.transitionMatrix
-        self.adj = self.adjacency(transitionMatr, Cells=Cells, directions=directions, include=include)
+        self.adj = self.adjacency(self.tr, directions=directions, include=include)
         if symm:
             self.adj = [self.adj[:, 1], self.adj[:, 0]]
             self.adj = np.array(self.adj).transpose()
@@ -169,9 +167,9 @@ class GDistance:
 
     def calculate_transition_values(self, dataValues, function):
         """
-        :param dataValues:
-        :param function:
-        :return:
+        :param dataValues: List of transition values for adjacent cells
+        :param function: Function applied to the values of adjacent cells
+        :return: Return a list of the result obtained by applying a function to the values of adjacent cells
         """
         result = []
         for data in dataValues:
@@ -183,13 +181,14 @@ class GDistance:
 
     def geocorrection(self,T,type ="c", property = "conductance", scaleValue=1, multpl=False, scl=False):
         """
-        :param T: TransitionLayer class
-        :param type:
-        :param property:
-        :param scaleValue:
-        :param multpl:
-        :param scl:
-        :return:
+        Correct Transition matrix taking into account local distances
+        :param T: TransitionLayer object
+        :param type: Type of geocorrection to apply; 'r' correction on the N-S direction,  'c', along the E-W direction
+        :param property: property of the transition cells; either conductance of resistance
+        :param scaleValue: Factor used in scaling transition values
+        :param multpl: set true to multipy correctionMatr with transition matrix
+        :param scl: set true to scale transition values to a reasonable range
+        :return: returns a transition layer with corrected cells
         """
         utils = Utils()
         extent = T.extent
@@ -255,9 +254,9 @@ class GDistance:
 
     def acc_cost(self,transitionLayer, targets):
         """
-        :param transitionLayer:
-        :param targets:
-        :return:
+        :param transitionLayer: TransitionLayer class
+        :param targets: List of target cells
+        :return: Return the matrix of accumulated costs to every target
         """
         transitionValues = transitionLayer.transitionMatrix
 

@@ -7,11 +7,12 @@ import os
 from math import *
 ##############################################
 class Utils:
+    "Utility Class for common functions"
     def coords_from_vector(self, vector_file):
         """
-
-        :param vector_file:
-        :return:
+        Obtains coordinates fro a vector file
+        :param vector_file: Input vector file e.g shapefile, geojson, kml etc
+        :return: returns a list of coordinates
         """
         datasource = ogr.Open(vector_file)
         layer = datasource.GetLayer(0)
@@ -26,11 +27,12 @@ class Utils:
 
     def save_raster(self, array, ref_raster, output='Raster.tif', gformat="GTiff", gdal_dtype=gdal.GDT_Float32):
         """
-        :param array:
-        :param output:
-        :param gformat:
-        :param gdal_dtype:
-        :return:
+        :param array: List of pixel values
+        :param ref_raster:Reference raster image
+        :param output: Path to the output raster image
+        :param gformat: format of the output raster image
+        :param gdal_dtype: Data type of the values
+        :return: None
         """
         raster = gdal.Open(ref_raster)
         no_data_value = 9999999999.
@@ -47,7 +49,6 @@ class Utils:
         band.FlushCache()
         band = None
         file = None
-        return 0
 
     def rasterize(self, vector,ref_raster, output_raster,field=1, nodatavalue = 0):
         """
@@ -55,8 +56,8 @@ class Utils:
         :param ref_raster: Reference raster image to obtain output raster properties
         :param output_raster: Path to output raster
         :param field: Attribute column in the vector table
-        :param nodatavalue:
-        :return:
+        :param nodatavalue: The value to assign for nodatavalue cells
+        :return: returns the pixel values for the output raster
         """
         mask_raster = gdal.Open(ref_raster)
         mask_band = mask_raster.GetRasterBand(1)
@@ -110,11 +111,10 @@ class Utils:
 
     def reclassify(self, inraster, matrix, outraster):
         """
-
-        :param inraster:
-        :param matrix:
-        :param outraster:
-        :return:
+        :param inraster: Path of the input raster
+        :param matrix: matrix of classification
+        :param outraster: the path of the output raster
+        :return: returns the pixel value of the classified raster
         """
         mask_raster = gdal.Open(inraster)
         mask_band = mask_raster.GetRasterBand(1)
@@ -151,9 +151,8 @@ class Utils:
 
     def get_pixel_values(self, imagepath):
         """
-
-        :param imagepath:
-        :return:
+        :param imagepath: Path of the input raster file
+        :return: returns the pixel values for the raster
         """
         raster = gdal.Open(imagepath)
         x = raster.RasterXSize
@@ -164,9 +163,8 @@ class Utils:
 
     def get_no_data_value(self,imagepath):
         """
-
-        :param imagepath:
-        :return:
+        :param imagepath: Path of the input raster file
+        :return: Returns the value for the nodatavalue cells
         """
         raster = gdal.Open(imagepath)
         no_data_value = 9999999999.
@@ -180,17 +178,18 @@ class Utils:
 
     def merge(self, *rasters):
         """
-
-        :param rasters:
-        :return:
+        :param rasters: Array of list for raster pixel values
+        :return: Returns the pixel value for the merged raster
         """
         rasters = np.array(rasters)
         return np.max(rasters, axis=0)
 
     def merge_raster(self, rasters, outputraster, nodatavalue):
         """
-        :param rasters:
-        :return:
+        :param rasters: List of paths of input raster files
+        :param outputraster: Path of the output raster file
+        :param nodatavalue: Value to assign the nodatavalue cells
+        :return: Returns the pixel value for the merged raster
         """
         import subprocess, os
         files_string = " ".join(rasters)
@@ -203,19 +202,19 @@ class Utils:
 
     def degree_to_radian(self, degree):
         """
-
-        :param degree:
-        :return:
+            Mathematical function for converting a degree to radian
+        :param degree: degree value
+        :return: returns a radian value
         """
         return degree * np.pi / 180
 
     def geodetic_to_cartesian(self, latitude, longitude, height=0):
         """
-
-        :param latitude:
-        :param longitude:
-        :param height:
-        :return:
+         Transforms a geodetic coordinates to cartesian (planar) coordinates
+        :param latitude: Latitude
+        :param longitude: Langitude
+        :param height: height
+        :return: returns an x,y planar coordinate
         """
         latitude = self.degree_to_radian(latitude)
         longitude = self.degree_to_radian(longitude)
@@ -233,7 +232,13 @@ class Utils:
         return [x,y]
 
     def terrain(self, elevation_raster, output_raster, opt='slope'):
-        "calculate the slope using the elevation in each point of the map"
+        """
+         calculate the slope using the elevation in each point of the map
+        :param elevation_raster: Path to the elevation image
+        :param output_raster: Path to the output raster
+        :param opt: Option e,g slope
+        :return: returns the pixel values of the resulting raster
+        """
         gdal.DEMProcessing(output_raster, elevation_raster, opt)
         if os.path.exists(output_raster):
             return self.get_pixel_values(output_raster)

@@ -8,7 +8,8 @@ import math
 class Raster:
     def __init__(self, imagePath):
         """
-        :param imagePath:
+        Constructor of the Raster class
+        :param imagePath: Path to the input raster file
         """
         self.imagePath = imagePath
         self.raster = gdal.Open(self.imagePath)
@@ -23,7 +24,7 @@ class Raster:
 
     def get_pixel_values(self):
         """
-        :return:
+        :return: Returns the pixel values of a raster image
         """
         x = self.raster.RasterXSize
         y = self.raster.RasterYSize
@@ -34,8 +35,8 @@ class Raster:
 
     def get_cell_values(self, indices):
         """
-        :param indices:
-        :return:
+        :param indices: A list of cell indices
+        :return: Return the pixel/cell values
         """
         pixvalues = self.get_pixel_values().flatten()
         result = []
@@ -45,14 +46,14 @@ class Raster:
 
     def get_projection(self):
         """
-        :return:
+        :return: returns the raster projection
         """
         proj = osr.SpatialReference(wkt=self.raster.GetProjection())
         return proj.GetAttrValue('AUTHORITY', 1)
 
     def get_extent(self):
         """
-        :return:
+        :return: returns the extent of the raster
         """
         ulx, xres, xskew, uly, yskew, yres = self.raster.GetGeoTransform()
         lrx = ulx + (self.raster.RasterXSize * xres)
@@ -61,26 +62,26 @@ class Raster:
 
     def get_resolution(self):
         """
-        :return:
+        :return: returns the raster resolution
         """
         ulx, xres, xskew, uly, yskew, yres = self.raster.GetGeoTransform()
         return abs(xres), abs(yres)
 
     def get_width(self):
         """
-        :return:
+        :return: returns the width of the raster
         """
         return self.raster.RasterXSize
 
     def get_height(self):
         """
-        :return:
+        :return: returns the hieght of the raster
         """
         return self.raster.RasterYSize
 
     def get_cells(self):
         """
-        :return:
+        :return: Retirns a dictionary of cells x,y pixel coordinates and the corresponding cell indices
         """
         cells = {}
         i = 0
@@ -92,8 +93,8 @@ class Raster:
 
     def xyFromCell(self, cells):
         """
-        :param cells:
-        :return:
+        :param cells: List of cells
+        :return: returns a list of the x,y map coordinates for specified list of cells
         """
         ncols = self.get_width()
         nrows = self.get_height()
@@ -109,8 +110,8 @@ class Raster:
 
     def rowFromCell(self, cells):
         """
-        :param cells:
-        :return:
+        :param cells: List of cells
+        :return: returns a list of rows (ys) for a given list of cells
         """
         w = self.get_width()
         h = self.get_height()
@@ -129,8 +130,8 @@ class Raster:
 
     def cellFromXY(self, xys):
         """
-        :param xys:
-        :return:
+        :param xys: List of x,y map coordinates
+        :return: returns a list of cells corresponding to a specified list of xy, map coordinates
         """
         ncols = self.get_width()
         nrows = self.get_height()
