@@ -47,6 +47,9 @@ Transition function generate an adjacency matrix out of a raster object. It take
     gd = Gdistance()
     trans = gd.transition(raster, function=mean, directions=4)
     
- You can also load a raster object from a file as shown; 
+ You can also load a raster object from a file as shown;
+ 
     raster = Raster("processing/friction.tif")
     trans =  gd.transition(raster, function=mean, directions=4)
+    
+  
