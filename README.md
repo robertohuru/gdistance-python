@@ -11,7 +11,7 @@ Travel can take place by car, train, boat or on foot.  (There could be more mode
 
 This package, for the purpose above, takes an input raster and creates a graph out of it.  Each of the NxM raster cells will be a node in the graph, and from any single cell C there will be 4-8-16 links to the neighbour cells.  With a link a cost value can be associated to represent, for instance, slope.  Links can represent one direction (or bi-directional), if the cost associates with travel does not depend on direction.
 
-<h2>Requirements</h2>
+<h2>Pre-requisite</h2>
 
 To use this package, please install Numpy and GDAL.
 
@@ -22,7 +22,12 @@ Use pip to install the package.
     pip install gdistance
 
 <h2>How to use</h2>
+Import the sub-packages from the main package as follows.
 
     from gdistance.raster import *
     from gdistance.gdistance import *
     from gdistance.utils import *
+
+The gdistance.raster sub-packages contains raster-based functions for performing raster analysis derived from GDAL.
+
+trans = gd.transition(raster, function=mean, directions=4)
