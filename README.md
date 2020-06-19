@@ -28,6 +28,25 @@ Import the sub-packages from the main package as follows.
     from gdistance.gdistance import *
     from gdistance.utils import *
 
-The gdistance.raster sub-packages contains raster-based functions for performing raster analysis derived from GDAL.
+The gdistance.raster sub-packages contains raster-based functions for performing raster analysis derived from GDAL. For instance to create and save a raster object, the following lines of codes can be applied.
+    
+    ncols, nrows = 10,10
+    minX, minY = 0, 0
+    xres, yres = 0.00833333, 0.00833333
+    maxX = minX + (ncols * xres)
+    maxY = minY + (nrows * xres)
+    values = np.random.uniform(0.001,0.15, size=nrows*ncols).reshape(nrows,ncols)
+    raster = Raster(extent=[minX, maxX,minY, maxY], xres=xres, yres=yres, crs=4326, nodatavalue=-9999, pix_values=values)
+    save_raster(raster, "raster.tif")
 
-trans = gd.transition(raster, function=mean, directions=4)
+Transition function generate an adjacency matrix out of a raster object. It takes a raster object, user-defined function and directions (number of neighbors for a cell).
+
+    def mean(x1, x2):
+        return np.divide(2, np.add(x1, x2))
+    
+    gd = Gdistance()
+    trans = gd.transition(raster, function=mean, directions=4)
+    
+ You can also load a raster object from a file as shown; 
+    raster = Raster("processing/friction.tif")
+    trans =  gd.transition(raster, function=mean, directions=4)
