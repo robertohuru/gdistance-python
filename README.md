@@ -62,9 +62,9 @@ Geocorrection function generates a new transition matrix after applying a distan
 
     >> trans = gd.geocorrection(trans)
 
-Accost function calculate the costs of travelling from every cell to target(s).
+Accost function calculate the costs of travelling from every cell to target(s). Target coordinates can be imported from a vector file using the coords_from_vector() function. 
 
-    >> # targets = coords_from_vector("inputs/bhu_facilities_point.shp")
+    >> # targets = coords_from_vector("targets.shp")
     >> targets = [(5.5, 1.5)]
     >> accost = gd.acc_cost(trans, targets)
     >> save_raster(min(accost), "accumcost.tif")
