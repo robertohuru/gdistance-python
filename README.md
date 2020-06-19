@@ -63,6 +63,7 @@ Geocorrection function generates a new transition matrix after applying a distan
     >> trans = gd.geocorrection(trans)
 
 Accost function calculate the costs of travelling from every cell to target(s).
+
     >> # targets = coords_from_vector("inputs/bhu_facilities_point.shp")
     >> targets = [(5.5, 1.5)]
     >> accost = gd.acc_cost(trans, targets)
