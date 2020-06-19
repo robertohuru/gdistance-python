@@ -30,13 +30,19 @@ Import the sub-packages from the main package as follows.
 
 The gdistance.raster sub-packages contains raster-based functions for performing raster analysis derived from GDAL. For instance to create and save a raster object, the following lines of codes can be applied.
     
-    ncols, nrows = 10,10
-    minX, minY = 0, 0
-    xres, yres = 0.00833333, 0.00833333
-    maxX = minX + (ncols * xres)
-    maxY = minY + (nrows * xres)
-    values = np.random.uniform(0.001,0.15, size=nrows*ncols).reshape(nrows,ncols)
-    raster = Raster(extent=[minX, maxX,minY, maxY], xres=xres, yres=yres, crs=4326, nodatavalue=-9999, pix_values=values)
+    >> ncols, nrows = 7,6
+    >> minX, minY = 0, 0
+    >> xres, yres = 1, 1
+    >> maxX = minX + (ncols * xres)
+    >> maxY = minY + (nrows * xres)
+    >> values = [[2, 2, 1, 1, 5, 5, 5], 
+              [2, 2, 8, 8, 5, 2, 1], 
+              [7, 1, 1, 8, 2, 2, 2], 
+              [8, 7, 8, 8, 8, 8, 5], 
+              [8, 8, 1, 1, 5, 3, 9], 
+              [8, 1, 1, 2, 5, 3, 9]]
+
+    >> raster = Raster(extent=[minX, maxX,minY, maxY], xres=xres, yres=yres, crs=3857, nodatavalue=-9999, pix_values=values)
     save_raster(raster, "raster.tif")
 
 Transition function generate an adjacency matrix out of a raster object. It takes a raster object, user-defined function and directions (number of neighbors for a cell).
