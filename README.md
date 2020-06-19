@@ -24,9 +24,9 @@ Use pip to install the package.
 <h2>How to use</h2>
 Import the sub-packages from the main package as follows.
 
-    from gdistance.raster import *
-    from gdistance.gdistance import *
-    from gdistance.utils import *
+    >> from gdistance.raster import *
+    >> from gdistance.gdistance import *
+    >> from gdistance.utils import *
 
 The gdistance.raster sub-packages contains raster-based functions for performing raster analysis derived from GDAL. For instance to create and save a raster object, the following lines of codes can be applied.
     
@@ -43,23 +43,27 @@ The gdistance.raster sub-packages contains raster-based functions for performing
               [8, 1, 1, 2, 5, 3, 9]]
 
     >> raster = Raster(extent=[minX, maxX,minY, maxY], xres=xres, yres=yres, crs=3857, nodatavalue=-9999, pix_values=values)
-    save_raster(raster, "raster.tif")
+    >> save_raster(raster, "raster.tif")
 
 Transition function generate an adjacency matrix out of a raster object. It takes a raster object, user-defined function and directions (number of neighbors for a cell).
 
-    def mean(x1, x2):
-        return np.divide(2, np.add(x1, x2))
+    >> def mean(x1, x2):
+            return np.divide(2, np.add(x1, x2))
     
-    gd = Gdistance()
-    trans = gd.transition(raster, function=mean, directions=4)
+    >> gd = Gdistance()
+    >> trans = gd.transition(raster, function=mean, directions=4)
     
  You can also load a raster object from a file as shown;
  
-    raster = Raster("processing/friction.tif")
-    trans =  gd.transition(raster, function=mean, directions=4)
+    >> raster = Raster("processing/friction.tif")
+    >> trans =  gd.transition(raster, function=mean, directions=4)
 
 Geocorrection function generates a new transition matrix after applying a distance factor. 
 
-    trans = gd.geocorrection(trans)
-  
+    >> trans = gd.geocorrection(trans)
 
+Accost function calculate the costs of travelling from every cell to target(s).
+    >> # targets = coords_from_vector("inputs/bhu_facilities_point.shp")
+    >> targets = [(5.5, 1.5)]
+    >> accost = gd.acc_cost(trans, targets)
+    >> save_raster(min(accost), "accumcost.tif")
