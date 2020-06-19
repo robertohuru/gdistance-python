@@ -16,6 +16,7 @@ Use pip to install the package.
     pip install gdistance
 
 <h2>How to use</h2>
+
     from gdistance.raster import *
     from gdistance.gdistance import *
     from gdistance.utils import *
