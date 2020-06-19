@@ -1,9 +1,7 @@
 # gdistance-python
-gdistance python package
-
 
 The gdistance package makes use of raster, which has an underlying fast implementation of sparse matrices. 
-The execution flow is borrowed from a R-gdistance package written by Hijmans and van Etten.
+The execution flow is borrowed from a R-gdistance package written by <a href="https://github.com/cran/gdistance">Hijmans and van Etten</a>.
 
 This is on a study (and course in) facility accessibility in developing countries.  Think roughly of a national marketshed analysis for hospitals and how reachable (travel time) these are for the population.  Hospitals could be other facilities (ATMs, schools, lawyers, drug stores, you name it).  The workflow that we focus on aims to determine trvale time to the nearest (in time) facility fork any location in a country's territory.
 
