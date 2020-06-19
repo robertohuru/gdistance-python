@@ -51,5 +51,9 @@ Transition function generate an adjacency matrix out of a raster object. It take
  
     raster = Raster("processing/friction.tif")
     trans =  gd.transition(raster, function=mean, directions=4)
-    
+
+Geocorrection function generates a new transition matrix after applying a distance factor. 
+
+    trans = gd.geocorrection(trans)
   
+
