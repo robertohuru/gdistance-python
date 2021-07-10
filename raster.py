@@ -56,7 +56,7 @@ class Raster(object):
             if len(kwargs) == 0:
                 extent = [-180, 180, -90, 90]
                 xres = 1
-                yres = 1
+                yres = -1
                 crs = 4326
                 self.data_type = gdal.GDT_Float32
             else:
