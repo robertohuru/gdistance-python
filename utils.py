@@ -102,6 +102,7 @@ def geodetic_distance(point1, point2, meters=True):
     """
     Vincenty's formula (inverse method) to calculate the distance (in
     kilometers or miles) between two points on the surface of a spheroid
+    >> point1
     """
 
     # WGS 84
