@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - gdistance-python
 jobs:
   release:
     name: Release
